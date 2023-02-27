@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";     // <== IMPORT
 import HomePage from "./pages/HomePage";     // <== IMPORT
 import ProjectListPage from "./pages/ProjectListPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+import EditProjectPage from "./pages/EditProjectPage.js";
 
 import { useEffect, useState } from "react";
 
@@ -43,6 +44,7 @@ function App() {
         <Route path="/" element={ <HomePage /> } />
         <Route path="/projects" element={ <ProjectListPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} /> } />
         <Route path="/projects/:projectId" element={<ProjectDetailsPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} />} />
+        <Route path="/projects/edit/:projectId" element={ <EditProjectPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} /> } />
       </Routes>
       
     </div>
