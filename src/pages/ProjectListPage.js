@@ -10,23 +10,16 @@ import AddProject from "../components/AddProject";
 const API_URL = BaseUrl;
 
 
-function ProjectListPage() {
-  const [projects, setProjects] = useState([]);
+function ProjectListPage({ projects, setProjects, getAllProjects}) {
 
-  const getAllProjects = () => {
-    axios
-      .get(`${API_URL}/projects`)
-      .then((response) => {
-        console.log("RESPONSE", response.data)
-        setProjects(response.data)})
-      .catch((error) => console.log(error));
-  };
+    useEffect(() => {
 
-  // We set this effect will run only once, after the initial render
-  // by setting the empty dependency array - []
-  useEffect(() => {
-    getAllProjects();
-  }, [] );
+        if (!projects.length) {
+            getAllProjects()
+        }
+
+    }, [])
+
 
   
   return (

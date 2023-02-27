@@ -6,8 +6,33 @@ import { Routes, Route } from "react-router-dom"; // <== IMPORT
 import Navbar from "./components/Navbar";     // <== IMPORT
 import HomePage from "./pages/HomePage";     // <== IMPORT
 import ProjectListPage from "./pages/ProjectListPage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+
+import { useEffect, useState } from "react";
+
+import { BaseUrl } from "./services/BaseUrl";
+
+import axios from "axios";
 
 function App() {
+
+  const [projects, setProjects] = useState([]);
+
+  const getAllProjects = () => {
+    axios
+      .get(`${BaseUrl}/projects`)
+      .then((response) => {
+        console.log("RESPONSE", response.data)
+        setProjects(response.data)})
+      .catch((error) => console.log(error));
+  };
+
+  // We set this effect will run only once, after the initial render
+  // by setting the empty dependency array - []
+  useEffect(() => {
+    getAllProjects();
+  }, [] );
+
   return (
     <div className="App">
       
@@ -16,7 +41,8 @@ function App() {
 
       <Routes>      
         <Route path="/" element={ <HomePage /> } />
-        <Route path="/projects" element={ <ProjectListPage /> } />
+        <Route path="/projects" element={ <ProjectListPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} /> } />
+        <Route path="/projects/:projectId" element={<ProjectDetailsPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} />} />
       </Routes>
       
     </div>

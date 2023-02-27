@@ -2,11 +2,40 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { BaseUrl } from "../services/BaseUrl";
 
 
-function ProjectDetailsPage (props) {
+function ProjectDetailsPage ({ projects, setProjects, getAllProjects}) {
   const [project, setProject] = useState(null);
+
+  const { projectId } = useParams();            // <== ADD
+  
+  
+  // Helper function that makes a GET request to the API
+  // and retrieves the project by id
+  const getProject = () => {          //  <== ADD A NEW FUNCTION
+    axios
+      .get(`${BaseUrl}/projects/${projectId}`)
+      .then((response) => {
+        const oneProject = response.data;
+        setProject(oneProject);
+      })
+      .catch((error) => console.log(error));
+  };
+  
+  
+  useEffect(()=> {  
+    if (!projects.length) {
+        console.log("NETWORK REQUEST")
+        getProject();
+
+    } else {
+        console.log("NETWORK SAVE")
+        let thisProject = projects.find((project) => project._id === projectId)
+        setProject(thisProject)
+    }              // <== ADD AN EFFECT
+  }, [] );
 
   
   return (
