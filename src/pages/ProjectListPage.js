@@ -18,6 +18,10 @@ function ProjectListPage({ projects, setProjects, getAllProjects, message, setMe
             getAllProjects()
         }
 
+        // return () => {
+        //     setMessage('')
+        // }
+
     }, [])
 
 
