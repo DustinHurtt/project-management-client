@@ -10,7 +10,7 @@ import AddProject from "../components/AddProject";
 const API_URL = BaseUrl;
 
 
-function ProjectListPage({ projects, setProjects, getAllProjects}) {
+function ProjectListPage({ projects, setProjects, getAllProjects, message, setMessage}) {
 
     useEffect(() => {
 
@@ -21,11 +21,24 @@ function ProjectListPage({ projects, setProjects, getAllProjects}) {
     }, [])
 
 
+
+
+    // useEffect(() => {
+
+    //     return () => {
+    //         setMessage('')
+    //     }
+
+    // }, [])
+
+
   
   return (
     <div className="ProjectListPage">
 
         <AddProject projects={projects} setProjects={setProjects} />
+
+        {message && <h4>{message}</h4>}
       
         {projects.map((project) => {
           return (

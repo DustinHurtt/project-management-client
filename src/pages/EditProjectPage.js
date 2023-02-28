@@ -7,7 +7,7 @@ import axios from "axios";
 
 import { BaseUrl } from "../services/BaseUrl";
 
-function EditProjectPage({ projects, setProjects, getAllProjects }) {
+function EditProjectPage({ projects, setProjects, getAllProjects, setMessage }) {
 
     const [ project, setProject ] = useState(null)
 
@@ -17,18 +17,22 @@ function EditProjectPage({ projects, setProjects, getAllProjects }) {
 
 
     const handleChange = (e) => {
+
         setProject((recent) => ({...recent, [e.target.name]: e.target.value}))
+    }
+
+    const getIndex = (array, thisId) => {
+        return array.findIndex((element) => element._id === thisId) 
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.put(`${BaseUrl}/projects/${projectId}`, project)
             .then((response) => {
-                console.log("Updated project", response.data)
                 let newProjects = [...projects]
-                let projectIndex = newProjects.findIndex((element) => element._id === projectId)
-                newProjects.splice(projectIndex, 1, response.data)
-                console.log("newProjects", newProjects)
+                // let projectIndex = newProjects.findIndex((element) => element._id === projectId)
+                newProjects[getIndex(newProjects, projectId)] = response.data
+                // newProjects.splice(projectIndex, 1, response.data)
                 setProjects(newProjects)
                 navigate('/projects')
                 
@@ -39,6 +43,27 @@ function EditProjectPage({ projects, setProjects, getAllProjects }) {
 
     }
 
+    const deleteProject = () => {
+        axios
+        .delete(`${BaseUrl}/projects/${projectId}`)
+        .then((response) => {
+            console.log("DELETE", response.data)
+            let newArray = [...projects]
+
+            newArray.splice(getIndex(newArray, projectId), 1)
+            setProjects(newArray)
+
+            setMessage(response.data.message)
+            setTimeout(() => {
+                setMessage('')
+            }, 4000)
+          // Once the delete request is resolved successfully
+          // navigate back to the list of projects.
+          navigate("/projects");
+        })
+        .catch((err) => console.log(err));
+    }
+
 
     useEffect(() => {
 
@@ -46,13 +71,12 @@ function EditProjectPage({ projects, setProjects, getAllProjects }) {
             axios
             .get(`${BaseUrl}/projects/${projectId}`)
             .then((response) => {
-                console.log("LINE 48", response.data)
               const oneProject = response.data;
               setProject(oneProject);
             })
             .catch((error) => console.log(error));  
         } else {
-            console.log("LINE 53")
+
             let thisProject = projects.find((project) => project._id === projectId)
             setProject(thisProject) 
         }
@@ -64,9 +88,6 @@ function EditProjectPage({ projects, setProjects, getAllProjects }) {
   return (
     <div className="EditProjectPage">
       <h3>Edit the Project</h3>
-
-
-
 
             {
          
@@ -96,9 +117,8 @@ function EditProjectPage({ projects, setProjects, getAllProjects }) {
 
             }
 
-            
-
-      
+            <button onClick={deleteProject}>Delete Project</button>
+                  
     </div>
   );
 }

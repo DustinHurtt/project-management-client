@@ -18,6 +18,7 @@ import axios from "axios";
 function App() {
 
   const [projects, setProjects] = useState([]);
+  const [message, setMessage] = useState('')
 
   const getAllProjects = () => {
     axios
@@ -42,9 +43,9 @@ function App() {
 
       <Routes>      
         <Route path="/" element={ <HomePage /> } />
-        <Route path="/projects" element={ <ProjectListPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} /> } />
+        <Route path="/projects" element={ <ProjectListPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} message={message} setMessage={setMessage}/> } />
         <Route path="/projects/:projectId" element={<ProjectDetailsPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} />} />
-        <Route path="/projects/edit/:projectId" element={ <EditProjectPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} /> } />
+        <Route path="/projects/edit/:projectId" element={ <EditProjectPage projects={projects} setProjects={setProjects} getAllProjects={getAllProjects} setMessage={setMessage} /> } />
       </Routes>
       
     </div>
